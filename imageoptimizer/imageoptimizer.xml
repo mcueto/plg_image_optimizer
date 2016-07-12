@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="plugin" group="content" version="3.5" method="upgrade">
+    <name>plgContentImageoptimizer</name>
+    <author>Marcelo Cueto</author>
+    <creationDate>July 2016</creationDate>
+    <copyright>Copyright (C)</copyright>
+    <license>GNU/GPL  </license>
+    <authorEmail>marcelo@marcelocueto.cl</authorEmail>
+    <authorUrl>www.marcelocueto.cl</authorUrl>
+    <version>1.0.0</version>
+    <description>
+      Automagically optimize images and lazyload them
+    </description>
+
+    <files>
+        <filename plugin="imageoptimizer">imageoptimizer.php</filename>
+    </files>
+
+    <config>
+    </config>
+</extension>
