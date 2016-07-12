@@ -1,21 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
 <extension type="plugin" group="content" version="3.5" method="upgrade">
-    <name>plgContentImageoptimizer</name>
-    <author>Marcelo Cueto</author>
-    <creationDate>July 2016</creationDate>
-    <copyright>Copyright (C)</copyright>
-    <license>GNU/GPL  </license>
-    <authorEmail>marcelo@marcelocueto.cl</authorEmail>
-    <authorUrl>www.marcelocueto.cl</authorUrl>
-    <version>1.0.0</version>
-    <description>
-      Automagically optimize images and lazyload them
-    </description>
+  <name>plgContentImageoptimizer</name>
+  <author>Marcelo Cueto</author>
+  <creationDate>July 2016</creationDate>
+  <copyright>Copyright (C)</copyright>
+  <license>GNU/GPL  </license>
+  <authorEmail>marcelo@marcelocueto.cl</authorEmail>
+  <authorUrl>www.marcelocueto.cl</authorUrl>
+  <version>1.0.0</version>
+  <description>
+    Automagically optimize images and lazyload them
+  </description>
 
-    <files>
-        <filename plugin="imageoptimizer">imageoptimizer.php</filename>
-    </files>
+  <files>
+    <filename plugin="imageoptimizer">imageoptimizer.php</filename>
+    <filename>install.mysql.utf8.sql</filename>
+  </files>
 
-    <config>
-    </config>
+  <config>
+  </config>
+
+  <install>
+    <sql>
+      <!-- <file driver="mysql" charset="utf8">sql/mysql/install.mysql.utf8.sql</file>
+      <file driver="sqlazure" charset="utf8">sql/sqlazure/install.sqlazure.utf8.sql</file> -->
+      <file driver="mysql" charset="utf8">install.mysql.utf8.sql</file>
+      <!-- <file driver="sqlazure" charset="utf8">sql/sqlazure/install.sqlazure.utf8.sql</file> -->
+    </sql>
+  </install>
+
+  <!-- <uninstall>
+    <sql>
+      <file driver="mysql" charset="utf8">sql/mysql/uninstall.mysql.utf8.sql</file>
+      <file driver="sqlazure" charset="utf8">sql/sqlazure/uninstall.sqlazure.utf8.sql</file>
+    </sql>
+  </uninstall> -->
+
+  <!-- <update>
+    <schemas>
+      <schemapath type="mysql">sql/mysql/updates</schemapath>
+      <schemapath type="sqlazure">sql/sqlazure/updates</schemapath>
+    </schemas>
+  </update> -->
+
 </extension>
