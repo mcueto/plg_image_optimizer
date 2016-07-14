@@ -13,47 +13,29 @@ class plgContentImageoptimizer extends JPlugin
   */
   protected $autoloadLanguage = true;
 
-  function _classifyImages(&$article){
-    $images = json_decode($article->images);
-    $newImages = array(); //To delete
-
-    $links = [
-      "local" => array(),
-      "external" => array()
-    ];
-
-    foreach ($images as $key => $image) {
-
-      $newImage = $image;
-
-      # TO delete
-      if($key=="image_intro_caption"){
-        $image= "http://www.google.cl";
-      }
-
-      if(!empty($image)){
-        if(preg_match("^(http|https)://^", $image)){
-          $links["external"][$key] = $image;
-        }else{
-          $links["local"][$key] = $image;
-        }
-      }
-
-      $newImages[$key] = $newImage; //To delete
-    }
-
-    $article->images = json_encode($newImages);
-
-    return $links;
+  function _classifyImage($image){
+    return preg_match("^(http|https)://^", $image);
   }
 
-  function _checkImageConfig($link, $source){
+  function _optimizeImage($image){
+    $imageList = array();
+
+    /*TODO: optimize and create every size of image*/
+    array_push($imageList,["min","$image"]);
+
+    return $imageList;
+
+  }
+
+  function _createImageConfig($link){
+    return true;
+  }
+
+  function _checkImageConfig($link){
     /*
     TODO:
-    0-Check if local or external in order to fix problems
-    1-Check if $result is a json config
+    -Check if $result is a json config
     */
-
     $db = JFactory::getDbo();
     // Retrieve the shout
     $query = $db->getQuery(true)
@@ -66,10 +48,22 @@ class plgContentImageoptimizer extends JPlugin
     $result = $db->loadResult();
 
     if($result){
-      return true;
+      return $result;
     }else{
       return false;
     }
+  }
+
+  /*
+  TODO: validate if a image configuration exists or not
+  */
+  function _replaceImage(&$image, $config, $quality = 'min'){
+    $config = json_decode($config);
+    foreach ($config->{"qualities"} as $eq) {
+      $image = $eq->{$quality};
+      // echo($image);
+    }
+    return true;
   }
 
   /**
@@ -77,22 +71,21 @@ class plgContentImageoptimizer extends JPlugin
   */
   public function onContentPrepare($context, &$article, &$params, $limitstart)
   {
-    $links = $this->_classifyImages($article);
-    foreach ($links as $kcategory => $category) {
-        foreach ($category as $klink => $link) {
-          $config = $this->_checkImageConfig($link, $category)
-          if($config){
-            // replace image
-          }else{
-            // Create config file
-            // replace image
-          }
-        }
+    $images = json_decode($article->images);
+    foreach ($images as $key => &$image) {
+      $config = $this->_checkImageConfig($image);
+      if($config){
+        $this->_replaceImage($image, $config, "min");
+      }else{
+        $imageList  = $this->_optimizeImage($image);
+        // $config     = $this->_createImageConfig($imageList);
+        // $this->_replaceImage($image, $config, "min");
+      }
     }
+    $article->images  = json_encode($images);
 
     /*
     TODO:
-    0-if exists, replace the image with the smallest copy of it
     0-if doesnt exists, create config, optimize image
     1-add settings to plugin to compress in different sizes(based on json config field)
     */
